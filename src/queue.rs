@@ -27,7 +27,8 @@ impl Queue {
     pub fn update(&mut self, event: Event) {
         match event.event_type {
             EventType::KeyPress(k) => match k {
-                Key::Space | Key::Return => {
+                Key::Return | Key::Space => self.keys = vec![],
+                Key::Tab => {
                     // Check if the current pattern is defined in the
                     // config file before emptying.
                     match self.config.has_match(&self.to_string()) {
