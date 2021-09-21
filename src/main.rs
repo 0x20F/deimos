@@ -50,7 +50,7 @@ fn main() {
         println!("Queue is: {:?}", queue);
 
         match event.event_type {
-            EventType::KeyPress(k) => queue.update(event)
+            EventType::KeyPress(k) => queue.update(event),
             _ => ()
         }
     };
