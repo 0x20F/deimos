@@ -15,8 +15,7 @@ use queue::Queue;
 
 fn main() {
     let mut queue = Queue::new();
-    println!("{:?}", queue.config);
-
+    
     let callback = move |event: Event| match event.event_type {
         EventType::KeyPress(_) => {
             queue.update(event);
