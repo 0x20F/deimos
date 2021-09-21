@@ -50,14 +50,8 @@ fn main() {
         println!("Queue is: {:?}", queue);
 
         match event.event_type {
-            EventType::ButtonPress(_) => (),
-            EventType::ButtonRelease(_) => (),
-
-            EventType::Wheel { .. } => (),
-            EventType::MouseMove { .. } => (),
-
-            EventType::KeyRelease(_) => (),
             EventType::KeyPress(k) => queue.update(event)
+            _ => ()
         }
     };
 
