@@ -5,17 +5,22 @@ use rdev::{
 };
 use std::fmt;
 
+use crate::config::Config;
+use crate::clipboard;
+use crate::simulate;
 
 
-#[derive(Debug)]
+
 pub struct Queue {
-    keys: Vec<String>
+    keys: Vec<String>,
+    pub config: Config
 }
 
 impl Queue {
     pub fn new() -> Self {
         Self {
-            keys: vec![]
+            keys: vec![],
+            config: Config::new()
         }
     }
 
@@ -25,7 +30,25 @@ impl Queue {
                 Key::Space | Key::Return => {
                     // Check if the current pattern is defined in the
                     // config file before emptying.
-                    println!("Exec was pressed: {}", self.to_string());
+                    match self.config.has_match(&self.to_string()) {
+                        Some(value) => {
+                            // Get the current clipboard data
+                            let current = clipboard::get();
+
+                            // Set the clipboard to the found snippet
+                            clipboard::set(value);
+                            
+                            // Delete the alias characters
+                            simulate::clear();
+
+                            // Paste the snippet
+                            simulate::paste();
+
+                            // Set the clipboard back to what it was before the snippet
+                            clipboard::set(current);
+                        },
+                        None => ()
+                    };
 
                     self.keys = vec![]
                 },
