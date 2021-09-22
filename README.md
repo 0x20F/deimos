@@ -29,7 +29,7 @@ opportunity to use it arises.
 ```
 
 
-As easy as that.
+As easy as that. Under the header `[snippets]` you write some key value pairs, where the key is what you want to type with your hands and the value is what you want to insert in its place.
 
 ## Building
 At the moment there are no actual releases since the projet is still in the "this is a fun gimmick" phase so you'll have to build it yourself if you want to use it.
