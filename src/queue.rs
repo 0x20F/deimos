@@ -37,8 +37,7 @@ impl Queue {
                     match self.config.has_match(&self.to_string()) {
                         Some(value) => {
                             // Delete the alias characters
-                            // -1 since it will attempt to delete too much
-                            simulate::backspace(self.to_string().len() - 1);
+                            simulate::backspace(self.to_string().len());
 
                             // Get the current clipboard data
                             let current = self.clipboard.get();

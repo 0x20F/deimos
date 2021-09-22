@@ -22,10 +22,8 @@ pub fn paste() {
 
 
 pub fn backspace(count: usize) {
-    for _ in 0..count {
+    for _ in 0..count - 1 {
         send(&EventType::KeyPress(Key::Backspace));
         send(&EventType::KeyRelease(Key::Backspace));
     }
 }
-
-
