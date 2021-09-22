@@ -6,13 +6,15 @@ use rdev::{
 use std::fmt;
 
 use crate::config::Config;
-use crate::clipboard;
+use crate::clipboard::ClipboardWrapper;
 use crate::simulate;
+use std::{ thread, time };
 
 
 
 pub struct Queue {
     keys: Vec<String>,
+    clipboard: ClipboardWrapper,
     pub config: Config
 }
 
@@ -20,7 +22,8 @@ impl Queue {
     pub fn new() -> Self {
         Self {
             keys: vec![],
-            config: Config::new()
+            config: Config::new(),
+            clipboard: ClipboardWrapper::new()
         }
     }
 
@@ -33,20 +36,25 @@ impl Queue {
                     // config file before emptying.
                     match self.config.has_match(&self.to_string()) {
                         Some(value) => {
+                            // Delete the alias characters
+                            // -1 since it will attempt to delete too much
+                            simulate::backspace(self.to_string().len() - 1);
+
                             // Get the current clipboard data
-                            let current = clipboard::get();
+                            let current = self.clipboard.get();
 
                             // Set the clipboard to the found snippet
-                            clipboard::set(value);
-                            
-                            // Delete the alias characters
-                            simulate::clear();
+                            self.clipboard.set(value);
 
                             // Paste the snippet
                             simulate::paste();
 
                             // Set the clipboard back to what it was before the snippet
-                            clipboard::set(current);
+                            // A bit of sleep is needed so the OS can have enough time
+                            // to paste the snippet value before we override it with the
+                            // old clipboard value.
+                            thread::sleep(time::Duration::from_millis(20));
+                            self.clipboard.set(current);
                         },
                         None => ()
                     };
